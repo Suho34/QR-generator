@@ -56,16 +56,20 @@ export default function Generator() {
       toast.error("No QR Code to share!");
       return;
     }
+
+    const qrCodeData = encodeURIComponent(inputValue.trim());
+    const shareableUrl = `${window.location.href}?qr=${qrCodeData}`;
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: "QR Code",
           text: "Scan this QR Code",
-          url: window.location.href,
+          url: shareableUrl,
         });
         toast.success("Shared Successfully!");
       } catch (err) {
-        console.error(err);
+        console.error("Sharing error:", err);
         toast.error("Sharing Failed!");
       }
     } else {
