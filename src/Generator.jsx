@@ -51,25 +51,23 @@ export default function Generator() {
     toast.success("QR Code text copied!");
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (!inputValue.trim()) {
       toast.error("No QR Code to share!");
       return;
     }
     if (navigator.share) {
-      navigator
-        .share({
+      try {
+        await navigator.share({
           title: "QR Code",
           text: "Scan this QR Code",
           url: window.location.href,
-        })
-        .then(() => {
-          toast.success("Shared Successfully!");
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Sharing Failed!");
         });
+        toast.success("Shared Successfully!");
+      } catch (err) {
+        console.error(err);
+        toast.error("Sharing Failed!");
+      }
     } else {
       toast.error("Sharing not supported on this browser.");
     }
